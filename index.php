@@ -11,4 +11,6 @@ $urls = [
     "https://assets.xtechcommerce.com/uploads/images/medium/0ef206245233b01bb5277f32c7e5b3e9.png"
 ];
 
-OmieAPI::alterarImagens($produto, $urls);
+$request = OmieAPI::alterarImagens($produto, $urls);
+
+echo $request;

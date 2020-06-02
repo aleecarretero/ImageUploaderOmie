@@ -2,19 +2,21 @@
 
 define("OMIE_ARGS", "?JSON=");
 
-class OmieAPI {
+class OmieAPI
+{
     // Updates the images in the product
     // if image_url is the same as already in the product, it does not duplicate
-    public static function alterarImagens(string $codigo_produto_integracao, array $urls) {
+    public static function alterarImagens(string $codigo_produto_integracao, array $urls): string
+    {
         $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
         $call = 'AlterarProduto';
 
         // URL to Json
-            foreach ($urls as &$url){
-                $url = [
+        foreach ($urls as &$url) {
+            $url = [
                     "url_imagem" => $url
                 ];
-            }
+        }
 
         $params = array(
             "codigo_produto_integracao"=>$codigo_produto_integracao,
@@ -29,10 +31,10 @@ class OmieAPI {
         );
 
         // create complete request URL
-            $request_url = $endpoint . OMIE_ARGS . json_encode($json);
+        $request_url = $endpoint . OMIE_ARGS . json_encode($json);
 
         // Curling
-            $options = array(
+        $options = array(
                 CURLOPT_CUSTOMREQUEST  =>"POST",    // set request type post or get
                 CURLOPT_POST           =>true,      // set to GET
                 CURLOPT_RETURNTRANSFER => true,     // return web page
@@ -43,33 +45,26 @@ class OmieAPI {
                 CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
                 CURLOPT_TIMEOUT        => 120,      // timeout on response
                 CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+                // CURLOPT_SSL_VERIFYPEER => true,        // ignores peer SSL verification
+                // CURLOPT_SSL_VERIFYHOST => true,        // ignores host SSL verification
+                CURLOPT_CAINFO         => dirname(__FILE__) . '\cert\cacert.pem'
             );
         
-            $http = curl_init($request_url);
+        $http = curl_init($request_url);
+                    
+        curl_setopt_array($http, $options);
             
-            // Disable SSL verification
-            curl_setopt($http, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($http, CURLOPT_SSL_VERIFYHOST, 0);
-            
-            curl_setopt_array($http, $options);
-            
-            $content = curl_exec($http);
-            $headers = curl_getinfo($http);
-            $err     = curl_errno($http); 
-            $errmsg  = curl_error($http);
+        $content = curl_exec($http);
+        $headers = curl_getinfo($http);
+        $err     = curl_errno($http);
+        $errmsg  = curl_error($http);
 
-            curl_close($http);
+        curl_close($http);
 
-            echo "Content: "  . PHP_EOL;
-            var_dump($content) . PHP_EOL;
-
-            echo "ErrNo: " . PHP_EOL;
-            var_dump($err) . PHP_EOL;
-
-            echo "ErrMsg: " . PHP_EOL;
-            var_dump($errmsg) . PHP_EOL;
-
-            echo "Headers: " . PHP_EOL;
-            var_dump($headers) . PHP_EOL;
+        if ($err != 0) {
+            $error = "Erro {$err}: $errmsg";
+            throw new Exception($error);
+        }
+        return $content;
     }
 }
