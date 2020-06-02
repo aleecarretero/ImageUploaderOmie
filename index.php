@@ -1,7 +1,10 @@
 <?php
 
+
 define("OMIE_APP_KEY", "651842348157", false);
 define("OMIE_APP_SECRET", "30b6a83aac3290df4a882822b452a4a2 ", false);
+
+require 'src/service/OmieAPI.php';
 
 $produto = "00444";
 $urls = [
