@@ -3,6 +3,8 @@
 define("OMIE_ARGS", "?JSON=");
 
 class OmieAPI {
+    // Updates the images in the product
+    // if image_url is the same as already in the product, it does not duplicate
     public static function alterarImagens(string $codigo_produto_integracao, array $urls) {
         $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
         $call = 'AlterarProduto';
@@ -42,8 +44,13 @@ class OmieAPI {
                 CURLOPT_TIMEOUT        => 120,      // timeout on response
                 CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
             );
-
+        
             $http = curl_init($request_url);
+            
+            // Disable SSL verification
+            curl_setopt($http, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($http, CURLOPT_SSL_VERIFYHOST, 0);
+            
             curl_setopt_array($http, $options);
             
             $content = curl_exec($http);
