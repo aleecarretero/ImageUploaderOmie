@@ -11,9 +11,16 @@ class OmieAPI {
         $call = 'AlterarProduto';
         $arg = "?JSON=";
 
+        // URL to Json
+            foreach ($urls as &$url){
+                $url = [
+                    "url_imagem" => $url
+                ];
+            }
+
         $params = array(
             "codigo_produto_integracao"=>$codigo_produto_integracao,
-            "imagens"=>array($urls)
+            "imagens"=>$urls
         );
 
         $json = array(
@@ -24,36 +31,43 @@ class OmieAPI {
         );
 
         // create complete request URL
-        $request_url = $endpoint . $arg . json_encode($json);
+            $request_url = $endpoint . $arg . json_encode($json);
 
         // Curling
-        $options = array(
-            CURLOPT_CUSTOMREQUEST  =>"POST",    //set request type post or get
-            CURLOPT_POST           =>true,      //set to GET
-            CURLOPT_RETURNTRANSFER => true,     // return web page
-            CURLOPT_HEADER         => false,    // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,     // follow redirects
-            CURLOPT_ENCODING       => "",       // handle all encodings
-            CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-            CURLOPT_TIMEOUT        => 120,      // timeout on response
-            CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-        );
+            $options = array(
+                CURLOPT_CUSTOMREQUEST  =>"POST",    //set request type post or get
+                CURLOPT_POST           =>true,      //set to GET
+                CURLOPT_RETURNTRANSFER => true,     // return web page
+                CURLOPT_HEADER         => false,    // don't return headers
+                CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+                CURLOPT_ENCODING       => "",       // handle all encodings
+                CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+                CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+                CURLOPT_TIMEOUT        => 120,      // timeout on response
+                CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+            );
 
-        $http = curl_init($request_url);
-        curl_setopt_array($http, $options);
-        
-        $content = curl_exec($http);
-        $headers = curl_getinfo($http);
-        $err     = curl_errno($http); 
-        $errmsg  = curl_error($http);
+            $http = curl_init($request_url);
+            curl_setopt_array($http, $options);
+            
+            $content = curl_exec($http);
+            $headers = curl_getinfo($http);
+            $err     = curl_errno($http); 
+            $errmsg  = curl_error($http);
 
-        curl_close($http);
+            curl_close($http);
 
-        var_dump($content);
-        var_dump($err);
-        var_dump($errmsg);
-        var_dump($headers);
+            echo "Content: "  . PHP_EOL;
+            var_dump($content) . PHP_EOL;
+
+            echo "ErrNo: " . PHP_EOL;
+            var_dump($err) . PHP_EOL;
+
+            echo "ErrMsg: " . PHP_EOL;
+            var_dump($errmsg) . PHP_EOL;
+
+            echo "Headers: " . PHP_EOL;
+            var_dump($headers) . PHP_EOL;
     }
 }
 
