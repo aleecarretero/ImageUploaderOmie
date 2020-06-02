@@ -1,12 +1,11 @@
 <?php
 
-class OmieAPI {
-    // Omie data
+define("OMIE_ARGS", "?JSON=");
 
+class OmieAPI {
     public static function alterarImagens(string $codigo_produto_integracao, array $urls) {
         $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
         $call = 'AlterarProduto';
-        $arg = "?JSON=";
 
         // URL to Json
             foreach ($urls as &$url){
@@ -28,12 +27,12 @@ class OmieAPI {
         );
 
         // create complete request URL
-            $request_url = $endpoint . $arg . json_encode($json);
+            $request_url = $endpoint . OMIE_ARGS . json_encode($json);
 
         // Curling
             $options = array(
-                CURLOPT_CUSTOMREQUEST  =>"POST",    //set request type post or get
-                CURLOPT_POST           =>true,      //set to GET
+                CURLOPT_CUSTOMREQUEST  =>"POST",    // set request type post or get
+                CURLOPT_POST           =>true,      // set to GET
                 CURLOPT_RETURNTRANSFER => true,     // return web page
                 CURLOPT_HEADER         => false,    // don't return headers
                 CURLOPT_FOLLOWLOCATION => true,     // follow redirects
