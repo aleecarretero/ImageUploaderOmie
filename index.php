@@ -1,9 +1,7 @@
 <?php
 
 require 'src/service/OmieAPI.php';
-
-$app_key = '651842348157';
-$app_secret = '30b6a83aac3290df4a882822b452a4a2';
+require 'src/service/cert/Keys.php';
 
 $produto = "00444";
 $urls = [
