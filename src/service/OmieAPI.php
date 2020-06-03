@@ -1,19 +1,25 @@
 <?php
 
 define("OMIE_ARGS", "?JSON=");                                          // Omie's URI parameter
-define("OMIE_APP_KEY", "651842348157", false);                          // Insert Omie's app_key
-define("OMIE_APP_SECRET", "30b6a83aac3290df4a882822b452a4a2", false);   // Insert Omie's app_secret
 
 require 'Utils.php'; // Formating utils
-
-class OmieAPI
-{
+require 'Authentication.php';
+class OmieAPI {
     // Updates the images in the product
     // if image_url is the same as already in the product, it does not duplicate
-    public static function alterarImagens(string $codigo_produto_integracao, array $urls): string
+    public static function alterarImagens(
+        string $codigo_produto_integracao,
+        array $urls, string $key,
+        string $secret
+        ): string
     {
         $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
         $call = 'AlterarProduto';
+
+        $auths = new Authentication($key, $secret);
+
+        $app_key = $auths->getKeys()['app_key'];
+        $app_secret = $auths->getKeys()['app_secret'];
 
         // URL to Json
         foreach ($urls as &$url) {
@@ -29,8 +35,8 @@ class OmieAPI
 
         $json = array(
             "call"=>$call,
-            "app_key"=>OMIE_APP_KEY,
-            "app_secret"=>OMIE_APP_SECRET,
+            "app_key"=>$app_key,
+            "app_secret"=>$app_secret,
             "param"=>array($params)
         );
 
