@@ -1,6 +1,10 @@
 <?php
 
-define("OMIE_ARGS", "?JSON=");
+define("OMIE_ARGS", "?JSON=");                                          // Omie's URI parameter
+define("OMIE_APP_KEY", "651842348157", false);                          // Insert Omie's app_key
+define("OMIE_APP_SECRET", "30b6a83aac3290df4a882822b452a4a2", false);   // Insert Omie's app_secret
+
+require 'Utils.php'; // Formating utils
 
 class OmieAPI
 {
@@ -65,10 +69,6 @@ class OmieAPI
             $error = "Erro {$err}: $errmsg";
             throw new Exception($error);
         }
-        return self::json_minify($content);
-    }
-
-    private static function json_minify(string $json): string {
-        return json_encode(json_decode($json, true), JSON_PRETTY_PRINT);
+        return Utils::json_minify($content);
     }
 }
