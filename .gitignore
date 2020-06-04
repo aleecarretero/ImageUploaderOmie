@@ -3,3 +3,4 @@ src/desktop.ini
 src/service/desktop.ini
 src/service/cert/desktop.ini
 src/images/desktop.ini
+src/service/cert/Keys.php
