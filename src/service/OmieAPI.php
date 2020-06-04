@@ -46,7 +46,7 @@ class OmieAPI {
         // Curling
         $options = array(
                 CURLOPT_CUSTOMREQUEST  => "POST",   // set request type post or get
-                CURLOPT_POST           => true,     // set to GET
+                CURLOPT_POST           => true,     // set to POST
                 CURLOPT_RETURNTRANSFER => true,     // return web page
                 CURLOPT_HEADER         => false,    // don't return headers
                 CURLOPT_FOLLOWLOCATION => true,     // follow redirects

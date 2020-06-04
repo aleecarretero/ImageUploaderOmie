@@ -1,6 +1,7 @@
 <?php
 
 require 'src/service/OmieAPI.php';
+require 'src/service/GithubAPI.php';
 require 'src/service/cert/Keys.php';
 
 $produto = [
@@ -9,9 +10,16 @@ $produto = [
     "codigo"                    => "00005784"
 ];
 
-// not working: redirect is sending blank image
+// generating image url
+// code here
+
+// getting downloadable image url from github
+$imageUrl = GithubAPI::getImageUrl('https://api.github.com/repos/aleecarretero/ImageUploaderOmie/contents/src/images/skate_casa_papel.jpg');
+
+// array with all image urls for this product
+// not working: github repo must be public
 $urls = [
-    "https://github.com/aleecarretero/ImageUploaderOmie/raw/master/src/images/skate_casa_papel.jpg" // GitHub repository link
+    $imageUrl // GitHub repository link
 ];
 
 $request = OmieAPI::alterarImagens($produto['codigo_produto_integracao'], $urls, APP_KEY, APP_SECRET);
