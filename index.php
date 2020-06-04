@@ -17,7 +17,6 @@ $produto = [
 $imageUrl = GithubAPI::getImageUrl('https://api.github.com/repos/aleecarretero/ImageUploaderOmie/contents/src/images/skate_casa_papel.jpg');
 
 // array with all image urls for this product
-// not working: github repo must be public
 $urls = [
     $imageUrl // GitHub repository link
 ];
