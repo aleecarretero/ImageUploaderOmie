@@ -45,8 +45,8 @@ class OmieAPI {
 
         // Curling
         $options = array(
-                CURLOPT_CUSTOMREQUEST  =>"POST",    // set request type post or get
-                CURLOPT_POST           =>true,      // set to GET
+                CURLOPT_CUSTOMREQUEST  => "POST",   // set request type post or get
+                CURLOPT_POST           => true,     // set to GET
                 CURLOPT_RETURNTRANSFER => true,     // return web page
                 CURLOPT_HEADER         => false,    // don't return headers
                 CURLOPT_FOLLOWLOCATION => true,     // follow redirects
@@ -55,9 +55,7 @@ class OmieAPI {
                 CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
                 CURLOPT_TIMEOUT        => 120,      // timeout on response
                 CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-                // CURLOPT_SSL_VERIFYPEER => true,        // ignores peer SSL verification
-                // CURLOPT_SSL_VERIFYHOST => true,        // ignores host SSL verification
-                CURLOPT_CAINFO         => dirname(__FILE__) . '\cert\cacert.pem'
+                CURLOPT_CAINFO         => dirname(__FILE__) . '\cert\cacert.pem' // cert location
             );
         
         $http = curl_init($request_url);
