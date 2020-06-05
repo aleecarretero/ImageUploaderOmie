@@ -7,12 +7,7 @@ require 'OmieAuthentication.php';
 class OmieAPI {
     // Updates the images in the product
     // if image_url is the same as already in the product, it does not duplicate
-    public static function alterarImagens(
-        string $codigo_produto,
-        array $urls, string $key,
-        string $secret
-        ): string
-    {
+    public static function alterarImagens(string $codigo_produto, array $urls, string $key, string $secret): array {
         $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
         $call = 'AlterarProduto';
 
@@ -33,13 +28,25 @@ class OmieAPI {
             "imagens"=>$urls
         );
 
+        // send Omie request
+        $response = self::sendRequest($endpoint, $call, $params, $app_key, $app_secret);
+
+        if ($response['err'] != 0) {
+            $error = "Erro {$response['err']}: {$response['errmsg']}";
+            throw new Exception($error);
+        }
+        return $response;
+    }
+
+    public static function sendRequest($endpoint, $call, $params, $app_key, $app_secret): array{
+        // create json
         $json = array(
             "call"=>$call,
             "app_key"=>$app_key,
             "app_secret"=>$app_secret,
             "param"=>array($params)
         );
-
+        
         // create complete request URL
         $request_url = $endpoint . OMIE_ARGS . json_encode($json);
 
@@ -66,13 +73,15 @@ class OmieAPI {
         $headers = curl_getinfo($http);
         $err     = curl_errno($http);
         $errmsg  = curl_error($http);
-
         curl_close($http);
 
-        if ($err != 0) {
-            $error = "Erro {$err}: $errmsg";
-            throw new Exception($error);
-        }
-        return Utils::json_minify($content);
+        $response = [
+            'content' => $content,
+            'headers' => $headers,
+            'err'     => $err,
+            'errmsg'  => $errmsg
+        ];
+
+        return $response;
     }
 }

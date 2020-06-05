@@ -69,11 +69,11 @@ class Utils {
         $urls = self::getImagesUrl($produtos);
 
         // push images to Omie for each product
-        foreach ($urls as $key=>$produto) {
+        foreach ($urls as $key=>$codProduto) {
 
                 $omieRequest = new OmieAPI;
-                $content = $omieRequest->alterarImagens(strval($key), $produto, APP_KEY, APP_SECRET);
-                $content = json_decode($content, true);
+                $response = $omieRequest->alterarImagens(strval($key), $codProduto, APP_KEY, APP_SECRET);
+                $content = json_decode($response['content'],true);
 
                 if ($content['codigo_status'] == 0) {
                     echo(

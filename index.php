@@ -5,6 +5,13 @@ require 'src/service/GithubAPI.php';
 require 'src/service/cert/Keys.php';
 require 'src/Model/Variables.php';
 
+// get the products
+    // get ListarProdutosResumido for 1 product per page
+
+    // for ($i=0;$<($total_de_registros mod 500);$i++{
+    //     get list fo page $i
+    // }
+
 $produtos = [
     [
         "codigo_produto_integracao" => "00444",
@@ -27,6 +34,6 @@ $produtos = [
         "codigo"                    => "SDGADFGSD"
     ]
 ];
-
+// send the images
 $utils = new Utils;
 $utils->sendBatchImg($produtos);
