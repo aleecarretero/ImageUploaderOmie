@@ -3,24 +3,75 @@
 require 'src/service/OmieAPI.php';
 require 'src/service/GithubAPI.php';
 require 'src/service/cert/Keys.php';
+require 'src/Model/Variables.php';
 
-$produto = [
-    "codigo_produto_integracao" => "00444",
-    "codigo_produto"            => 1776599691,
-    "codigo"                    => "00005784"
+$produtos = [
+    [
+        "codigo_produto_integracao" => "00444",
+        "codigo_produto"            => 1776599691,
+        "codigo"                    => "00005784"
+    ],
+    [
+        "codigo_produto_integracao" => "PRD00002",
+        "codigo_produto"            => 1763673825,
+        "codigo"                    => "PRD00002"
+    ],
+    [
+        "codigo_produto_integracao" => "PRD00005",
+        "codigo_produto"            => 1777979909,
+        "codigo"                    => "PRD00005"
+    ]
 ];
 
-// generating image url
-// code here
+// Generate image url
+    $baseUrl = GITHUB_GET_CONTENTS_PATH . IMAGES_FOLDER_PATH;
+    $urls = [];
 
-// getting downloadable image url from github
-$imageUrl = GithubAPI::getImageUrl('https://api.github.com/repos/aleecarretero/ImageUploaderOmie/contents/src/images/skate_casa_papel.jpg');
+    foreach ($produtos as $produto) {
+        $prodImgUrls = [];
+        
+        // get all product folders
+        $productFolder = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
+        for ($i=0;$i<5;$i++){
+            $imagePath = false;
 
-// array with all image urls for this product
-$urls = [
-    $imageUrl // GitHub repository link
-];
+            $jpgImageName  = $produto['codigo'] . '-' . strval($i+1) . '.jpg';  // jpg format
+            $jpegImageName = $produto['codigo'] . '-' . strval($i+1) . '.jpeg'; // jpeg format
+            $pngImageName  = $produto['codigo'] . '-' . strval($i+1) . '.png';  // png format
 
-$request = OmieAPI::alterarImagens($produto['codigo_produto_integracao'], $urls, APP_KEY, APP_SECRET);
+            echo($productFolder . $jpgImageName) . PHP_EOL;
+            echo($productFolder . $jpegImageName) . PHP_EOL;
+            echo($productFolder . $pngImageName) . PHP_EOL;
 
-echo $request;
+            if (file_exists($productFolder . $jpegImageName)){
+                $imagePath = $productFolder . $jpegImageName;
+            }
+            if (file_exists($productFolder . $jpgImageName)){
+                $imagePath = $productFolder . $jpgImageName;
+            }
+            if (file_exists($productFolder . $pngImageName)){
+                $imagePath = $productFolder . $pngImageName;
+            }
+            if ($imagePath) {
+                // getting downloadable image url from github
+                $imageUrl = GITHUB_GET_CONTENTS_PATH . $imagePath;
+                echo $imageUrl . PHP_EOL;
+                
+                $downloadImageUrl = GithubAPI::getImageUrl($imageUrl);
+                
+                // array with all image urls for this product
+                array_push($prodImgUrls, $downloadImageUrl);
+                
+                $urls = Utils::array_push_assoc($urls, $produto['codigo'], $prodImgUrls); // GitHub repository link
+            }
+        }
+    }
+
+// TESTING
+    print_r($urls);
+    exit();
+
+// post images to Omie
+    $request = OmieAPI::alterarImagens($produto['codigo_produto_integracao'], $urls, APP_KEY, APP_SECRET);
+
+    echo $request;
