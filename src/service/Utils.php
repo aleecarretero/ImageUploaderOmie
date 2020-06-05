@@ -31,15 +31,12 @@ class Utils {
     
                 if (file_exists($productFolder . $jpegImageName)) {
                     $imagePath = $productFolder . $jpegImageName;
-                    echo $imagePath . PHP_EOL;
                 }
                 if (file_exists($productFolder . $jpgImageName)) {
                     $imagePath = $productFolder . $jpgImageName;
-                    echo $imagePath . PHP_EOL;
                 }
                 if (file_exists($productFolder . $pngImageName)) {
                     $imagePath = $productFolder . $pngImageName;
-                    echo $imagePath . PHP_EOL;
                 }
                 if ($imagePath) {
                     // getting downloadable image url from github
