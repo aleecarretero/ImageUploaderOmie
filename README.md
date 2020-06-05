@@ -1,7 +1,7 @@
 # ImageUploaderOmie
  A script that dynamically gets all the images stored in .\src\images and then uploads them into Omie.
 
- ### Each image filepath must be:
+ ### Each image file path must be:
  src\images\\:product_code
  > \:product_code - Omie's code for the product. Found under "codigo" parameter.
 
