@@ -1,5 +1,5 @@
 # ImageUploaderOmie
- A script that dynamically gets all the images stored in .\src\images and then uploads them into Omie.
+ A script that dynamically gets all the images stored in `.\src\images` and then uploads them into Omie.
 
  [Omie's API documentation:](https://app.omie.com.br/)
  ![[Omie's API documentation](https://app.omie.com.br/developer/service-list/)](https://i.imgur.com/rbSJQ18.png)
