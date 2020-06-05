@@ -8,7 +8,7 @@ class OmieAPI {
     // Updates the images in the product
     // if image_url is the same as already in the product, it does not duplicate
     public static function alterarImagens(
-        string $codigo_produto_integracao,
+        string $codigo_produto,
         array $urls, string $key,
         string $secret
         ): string
@@ -29,7 +29,7 @@ class OmieAPI {
         }
 
         $params = array(
-            "codigo_produto_integracao"=>$codigo_produto_integracao,
+            "codigo_produto"=>$codigo_produto,
             "imagens"=>$urls
         );
 

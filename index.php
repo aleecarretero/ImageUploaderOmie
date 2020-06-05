@@ -62,16 +62,24 @@ $produtos = [
                 // array with all image urls for this product
                 array_push($prodImgUrls, $downloadImageUrl);
                 
-                $urls = Utils::array_push_assoc($urls, $produto['codigo'], $prodImgUrls); // GitHub repository link
+                $urls = Utils::array_push_assoc($urls, $produto['codigo_produto'], $prodImgUrls); // GitHub repository link
             }
         }
     }
 
 // TESTING
     print_r($urls);
-    exit();
+    // exit();
 
 // post images to Omie
-    $request = OmieAPI::alterarImagens($produto['codigo_produto_integracao'], $urls, APP_KEY, APP_SECRET);
 
-    echo $request;
+foreach ($urls as $key=>$produto) {
+
+        $request = OmieAPI::alterarImagens(strval($key), $produto, APP_KEY, APP_SECRET);
+
+        echo (
+            '================================' . PHP_EOL .
+            $request . PHP_EOL .
+            '================================'
+        );
+}
