@@ -1,7 +1,7 @@
 <?php
 
-define("OMIE_APP_KEY_SIZE", 12, false);     // Insert Omie's app_key
-define("OMIE_APP_SECRET_SIZE", 32, false);  // Insert Omie's app_secret
+define("OMIE_APP_KEY_SIZE", 12, false);     // for validation
+define("OMIE_APP_SECRET_SIZE", 32, false);  // for validation
 
 class OmieAuthentication {
     protected string $key;
@@ -24,7 +24,7 @@ class OmieAuthentication {
         
         // variables cleanup
         $keyNumbers = $key;
-        preg_replace('/\D/','' , $key);
+        preg_replace('/\D/','' , $keyNumbers);
         $secretHash = $secret;
         preg_replace('/[^\d|\w]/','', $secretHash);
 
