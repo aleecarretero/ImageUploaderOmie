@@ -73,12 +73,20 @@ class Utils {
 
                 $omieRequest = new OmieAPI;
                 $content = $omieRequest->alterarImagens(strval($key), $produto, APP_KEY, APP_SECRET);
+                $content = json_decode($content, true);
 
-                echo (
-                    '================================' . PHP_EOL .
-                    $content . PHP_EOL .
-                    '================================' . PHP_EOL
-                );
+                if ($content['codigo_status'] == 0) {
+                    echo(
+                        'Sucesso! ' .
+                        "Produto {$content['codigo_produto_integracao']} " .
+                        'alterado com sucesso' . PHP_EOL
+                    );
+                } else {
+                    echo (
+                        "Erro {$content['codigo_status']}: " .
+                        $content['descricao_status']
+                    );
+                }
         }
     }
 }
