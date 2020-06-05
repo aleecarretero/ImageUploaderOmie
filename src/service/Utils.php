@@ -1,6 +1,38 @@
 <?php
 
 class Utils {
+    // log file
+    public static function setLogPath($path): void {
+        $now = new DateTime();
+        $logFilePath = (
+            $path . DIRECTORY_SEPARATOR . 
+            "Logs" . DIRECTORY_SEPARATOR .
+            $now->format('Ymd-His') . DIRECTORY_SEPARATOR
+        );
+
+        define('LOG_FILE', $logFilePath . $now->getTimestamp() . '.txt');
+
+        mkdir($logFilePath, 0777, true);
+    }
+
+    // log messages
+    public static function echoSys(string $msg, int $hashtagNumber = 4, int $eolUp = 1, int $eolDown = 1): string {
+        $now = new DateTime();
+        $output = (
+            str_repeat(PHP_EOL, $eolUp) .
+            str_repeat('#', $hashtagNumber) .
+            " {$msg} - " . $now->format('Y-m-d H:i:s') . ' ' .
+            str_repeat('#', $hashtagNumber) .
+            str_repeat(PHP_EOL, $eolDown)
+        );
+        echo $output;
+        return $output;
+    }
+
+    public static function echoLog($msg): void{
+        echo $msg;
+        file_put_contents(LOG_FILE,$msg,FILE_APPEND);
+    }
 
     // json formatting
     public static function json_minify(string $json): string {
@@ -50,7 +82,11 @@ class Utils {
                     
                     $urls = Utils::array_push_assoc($urls, $produto['codigo_produto'], $prodImgUrls); // GitHub repository link
                 } elseif ($i==0) {
-                    echo ("Nenhuma imagem encontrada para o produto {$produto['codigo']}" . PHP_EOL);
+                    Utils::echoLog (
+                        'Erro!' . PHP_EOL .
+                        "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
+                        "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
+                    );
                 }
             }
         }
@@ -64,11 +100,12 @@ class Utils {
 
     // push a batch of images to Omie
     public static function sendBatchImg(array $produtos) {
-        
         // Generate image url
+        Utils::echoSys('Coletando os endereços das imagens',4,1,2);
         $urls = self::getImagesUrl($produtos);
 
         // push images to Omie for each product
+        Utils::echoSys('Enviando as imagens para o Omie',4,1,2);
         foreach ($urls as $key=>$codProduto) {
 
                 $omieRequest = new OmieAPI;
@@ -76,13 +113,13 @@ class Utils {
                 $content = json_decode($response['content'],true);
 
                 if ($content['codigo_status'] == 0) {
-                    echo(
-                        'Sucesso! ' .
+                    Utils::echoLog (
+                        'Sucesso!' . PHP_EOL .
                         "Produto {$content['codigo_produto_integracao']} " .
-                        'alterado com sucesso' . PHP_EOL
+                        'alterado com sucesso' . LINE_SEPARATOR
                     );
                 } else {
-                    echo (
+                    Utils::echoLog (
                         "Erro {$content['codigo_status']}: " .
                         $content['descricao_status']
                     );
