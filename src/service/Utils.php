@@ -39,6 +39,7 @@ class Utils {
                 }
                 if (file_exists($productFolder . $pngImageName)) {
                     $imagePath = $productFolder . $pngImageName;
+                    echo $imagePath . PHP_EOL;
                 }
                 if ($imagePath) {
                     // getting downloadable image url from github
