@@ -3,7 +3,7 @@
 define("OMIE_ARGS", "?JSON=");                                          // Omie's URI parameter
 
 require 'Utils.php'; // Formating utils
-require 'Authentication.php';
+require 'OmieAuthentication.php';
 class OmieAPI {
     // Updates the images in the product
     // if image_url is the same as already in the product, it does not duplicate
@@ -16,7 +16,7 @@ class OmieAPI {
         $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
         $call = 'AlterarProduto';
 
-        $auths = new Authentication($key, $secret);
+        $auths = new OmieAuthentication($key, $secret);
 
         $app_key = $auths->getKeys()['app_key'];
         $app_secret = $auths->getKeys()['app_secret'];

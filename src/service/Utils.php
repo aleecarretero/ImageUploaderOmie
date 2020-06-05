@@ -1,14 +1,19 @@
 <?php
 
 class Utils {
+
+    // json formatting
     public static function json_minify(string $json): string {
         return json_encode(json_decode($json, true), JSON_PRETTY_PRINT);
     }
+
+    // pushing associative arrays
     public static function array_push_assoc(array $array, $key, $value){
         $array[$key] = $value;
         return $array;
     }
 
+    // return array of images to be pushed to Omie
     public static function getImagesUrl(array $produtos): array {
         $urls = [];
     
@@ -24,33 +29,59 @@ class Utils {
                 $jpegImageName = $produto['codigo'] . '-' . strval($i+1) . '.jpeg'; // jpeg format
                 $pngImageName  = $produto['codigo'] . '-' . strval($i+1) . '.png';  // png format
     
-                echo($productFolder . $jpgImageName) . PHP_EOL;
-                echo($productFolder . $jpegImageName) . PHP_EOL;
-                echo($productFolder . $pngImageName) . PHP_EOL;
-    
                 if (file_exists($productFolder . $jpegImageName)) {
                     $imagePath = $productFolder . $jpegImageName;
+                    echo $imagePath . PHP_EOL;
                 }
                 if (file_exists($productFolder . $jpgImageName)) {
                     $imagePath = $productFolder . $jpgImageName;
+                    echo $imagePath . PHP_EOL;
                 }
                 if (file_exists($productFolder . $pngImageName)) {
                     $imagePath = $productFolder . $pngImageName;
+                    echo $imagePath . PHP_EOL;
                 }
                 if ($imagePath) {
                     // getting downloadable image url from github
                     $imageUrl = GITHUB_GET_CONTENTS_PATH . $imagePath;
-                    echo $imageUrl . PHP_EOL;
-                    
-                    $downloadImageUrl = GithubAPI::getImageUrl($imageUrl);
+
+                    $git = new GithubAPI;
+                    $downloadImageUrl = $git->getImageUrl($imageUrl);
                     
                     // array with all image urls for this product
                     array_push($prodImgUrls, $downloadImageUrl);
                     
                     $urls = Utils::array_push_assoc($urls, $produto['codigo_produto'], $prodImgUrls); // GitHub repository link
+                } elseif ($i==0) {
+                    echo ("Nenhuma imagem encontrada para o produto {$produto['codigo']}" . PHP_EOL);
                 }
             }
         }
-        return $urls;
+        if ($urls) {
+            return $urls;
+        } else {
+            throw new Exception("Nenhum produto encontrado", 404);
+            
+        }
+    }
+
+    // push a batch of images to Omie
+    public static function sendBatchImg(array $produtos) {
+        
+        // Generate image url
+        $urls = self::getImagesUrl($produtos);
+
+        // push images to Omie for each product
+        foreach ($urls as $key=>$produto) {
+
+                $omieRequest = new OmieAPI;
+                $content = $omieRequest->alterarImagens(strval($key), $produto, APP_KEY, APP_SECRET);
+
+                echo (
+                    '================================' . PHP_EOL .
+                    $content . PHP_EOL .
+                    '================================' . PHP_EOL
+                );
+        }
     }
 }

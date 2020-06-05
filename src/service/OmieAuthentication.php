@@ -3,7 +3,7 @@
 define("OMIE_APP_KEY_SIZE", 12, false);     // Insert Omie's app_key
 define("OMIE_APP_SECRET_SIZE", 32, false);  // Insert Omie's app_secret
 
-class Authentication {
+class OmieAuthentication {
     protected string $key;
     protected string $secret;
 

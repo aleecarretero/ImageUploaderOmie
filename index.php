@@ -20,25 +20,13 @@ $produtos = [
         "codigo_produto_integracao" => "PRD00005",
         "codigo_produto"            => 1777979909,
         "codigo"                    => "PRD00005"
+    ],
+    [
+        "codigo_produto_integracao" => "SFKUADSA",
+        "codigo_produto"            => 4123412314,
+        "codigo"                    => "SDGADFGSD"
     ]
 ];
 
-// Generate image url
-$urls = Utils::getImagesUrl($produtos);
-
-// TESTING
-    print_r($urls);
-    // exit();
-
-// post images to Omie
-
-foreach ($urls as $key=>$produto) {
-
-        $request = OmieAPI::alterarImagens(strval($key), $produto, APP_KEY, APP_SECRET);
-
-        echo (
-            '================================' . PHP_EOL .
-            $request . PHP_EOL .
-            '================================'
-        );
-}
+$utils = new Utils;
+$utils->sendBatchImg($produtos);
