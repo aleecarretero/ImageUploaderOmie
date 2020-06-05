@@ -5,6 +5,10 @@ require 'src/service/GithubAPI.php';
 require 'src/service/cert/Keys.php';
 require 'src/Model/Variables.php';
 
+echo OmieAPI::countProducts();
+
+exit();
+
 Utils::setLogPath(__DIR__);
 
 file_put_contents(LOG_FILE,Utils::echoSys('Início de log',6,0),FILE_APPEND);
