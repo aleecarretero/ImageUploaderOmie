@@ -41,6 +41,7 @@ class OmieAPI {
     // get a list of all the products
         // TO DO
         public static function getProducts(bool $longList=false): array {
+            // define if longlisted request or shorlisted
             if($longList){
                 $call = 'ListarProdutos';
             } else {
@@ -51,15 +52,43 @@ class OmieAPI {
             $app_key = APP_KEY;
             $app_secret = APP_SECRET;
             
-            // iterate to get all pages
-            $params = array(
+            // params for 1 item per page request
+            $firstParams = array(
                 "pagina"                    => 1,
                 "registros_por_pagina"      => 1,
                 "apenas_importado_api"      => "N",
                 "filtrar_apenas_omiepdv"    => "N"
             );
+            
+            // get amount of pages
+            $totalRegistrosContent = self::sendRequest($endpoint, $call, $firstParams, $app_key, $app_secret);
+            $totalRegistrosContent = $totalRegistrosContent['content'];
+            $totalRegistrosContent = json_decode($totalRegistrosContent,true);
+            
+            $totalRegistros = $totalRegistrosContent['total_de_registros'];
+            $paginas = intdiv($totalRegistros,500);
+            
+            // set $params for request
+            $params = array(
+                "pagina"                    => 1,
+                "registros_por_pagina"      => 500,
+                "apenas_importado_api"      => "N",
+                "filtrar_apenas_omiepdv"    => "N"
+            );
 
+            // initialize $produtos
             $produtos = [];
+            
+            // iterate to get all pages
+            for ($i = 0; $i<=$paginas;$i++){
+                $params["pagina"] = $i+1;
+                $return = OmieAPI::sendRequest($endpoint, $call, $params, $app_key, $app_secret)['content'];
+                $return = json_decode($return,true)['produto_servico_resumido'];
+                print_r($return);
+                foreach($return as $produto) {
+                    array_push($produtos, $produto);
+                }
+            }
             return $produtos;
         }
 
@@ -105,8 +134,8 @@ class OmieAPI {
                     CURLOPT_FOLLOWLOCATION => true,     // follow redirects
                     CURLOPT_ENCODING       => "",       // handle all encodings
                     CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-                    CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-                    CURLOPT_TIMEOUT        => 120,      // timeout on response
+                    CURLOPT_CONNECTTIMEOUT => 1200,      // timeout on connect
+                    CURLOPT_TIMEOUT        => 1200,      // timeout on response
                     CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
                     CURLOPT_CAINFO         => dirname(__FILE__) . '\cert\cacert.pem' // cert location
                 );
