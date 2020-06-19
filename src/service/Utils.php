@@ -26,6 +26,7 @@ class Utils {
             str_repeat(PHP_EOL, $eolDown)
         );
         echo $output;
+        Utils::Appendlog($output);
         return $output;
     }
 

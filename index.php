@@ -6,14 +6,14 @@ require 'src/Model/Variables.php';
 
 // logging settings
 Utils::setLogPath(__DIR__);
-file_put_contents(LOG_FILE,Utils::echoSys('Início de log',6,0),FILE_APPEND);
+Utils::echoSys('Início de log',6,0);
 
 // main
 // get the products
 $produtos = OmieAPI::getProducts();
 
 Utils::echoSys('Lista de produtos', 6,0);
-Utils::Appendlog(print_r($produtos, true));
+Utils::appendLog(print_r($produtos, true). LINE_SEPARATOR);
 
 // for testing
     // $produtos = [
