@@ -11,34 +11,6 @@ require_once 'src/service/OmieAPI.php';
 // main
     // get the products
     $produtos = OmieAPI::getProducts(false,"04");
-
-    // for testing
-        // $produtos = [
-        //     [
-        //         "codigo_produto_integracao" => "00444",
-        //         "codigo_produto"            => 1776599691,
-        //         "codigo"                    => "00005784",
-        //         "descricao"                 => "Descrição 1"
-        //     ],
-        //     [
-        //         "codigo_produto_integracao" => "PRD00002",
-        //         "codigo_produto"            => 1763673825,
-        //         "codigo"                    => "PRD00002",
-        //         "descricao"                 => "Descrição 2"
-        //     ],
-        //     [
-        //         "codigo_produto_integracao" => "PRD00005",
-        //         "codigo_produto"            => 1777979909,
-        //         "codigo"                    => "PRD00005",
-        //         "descricao"                 => "Descrição 3"
-        //     ],
-        //     [
-        //         "codigo_produto_integracao" => "SFKUADSA",
-        //         "codigo_produto"            => 4123412314,
-        //         "codigo"                    => "SDGADFGSD",
-        //         "descricao"                 => "Descrição 4"
-        //     ]
-        // ];
     
     // logging
         Utils::echoSys('Lista de produtos', 6,0);
