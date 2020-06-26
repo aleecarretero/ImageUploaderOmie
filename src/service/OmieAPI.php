@@ -2,8 +2,10 @@
 
 define("OMIE_ARGS", "?JSON=");                                          // Omie's URI parameter
 
-require 'Utils.php'; // Formating utils
-require 'OmieAuthentication.php';
+require_once 'Utils.php'; // Formating utils
+require_once 'OmieAuthentication.php';
+require_once 'cert/Keys.php';
+
 class OmieAPI {
     // Updates the images in the product
         // if image_url is the same as already in the product, it does not duplicate

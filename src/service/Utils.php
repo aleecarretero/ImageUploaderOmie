@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__.'/../service/GithubAPI.php';
+require_once __DIR__.'/../service/OmieAPI.php';
+
 class Utils {
     // log file
     public static function setLogPath($path): void {
@@ -58,7 +61,8 @@ class Utils {
             $prodImgUrls = [];
             
             // get all product folders
-            $productFolder = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
+            $productFolder = IMAGES_FOLDER_DIR . $produto['codigo'] . '\\';
+            $productURL = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
             for ($i=0;$i<5;$i++) {
                 $imagePath = false;
     
@@ -67,13 +71,13 @@ class Utils {
                 $pngImageName  = $produto['codigo'] . '-' . strval($i+1) . '.png';  // png format
     
                 if (file_exists($productFolder . $jpegImageName)) {
-                    $imagePath = $productFolder . $jpegImageName;
+                    $imagePath = $productURL . $jpegImageName;
                 }
                 if (file_exists($productFolder . $jpgImageName)) {
-                    $imagePath = $productFolder . $jpgImageName;
+                    $imagePath = $productURL . $jpgImageName;
                 }
                 if (file_exists($productFolder . $pngImageName)) {
-                    $imagePath = $productFolder . $pngImageName;
+                    $imagePath = $productURL . $pngImageName;
                 }
                 if ($imagePath) {
                     // getting downloadable image url from github

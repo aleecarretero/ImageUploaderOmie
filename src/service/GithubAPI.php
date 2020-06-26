@@ -1,5 +1,7 @@
 <?php
 
+require_once 'cert/Keys.php';
+
 class GithubAPI {
     static public function getImageUrl($url): string {
         $requestUrl = $url;
@@ -15,7 +17,7 @@ class GithubAPI {
             CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
             CURLOPT_TIMEOUT        => 120,      // timeout on response
             CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-            CURLOPT_CAINFO         => dirname(__FILE__) . '\cert\cacert.pem', // cert location
+            CURLOPT_CAINFO         => __DIR__ . '\cert\cacert.pem', // cert location
             CURLOPT_USERAGENT      => GITHUB_USERNAME,
             CURLOPT_USERPWD        => GITHUB_KEY
         ];
