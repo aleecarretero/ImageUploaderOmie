@@ -2,6 +2,7 @@
 
 require_once 'src/Model/Variables.php';
 require_once 'src/service/Utils.php';
+require_once 'src/service/OmieAPI.php';
 
 // logging settings
     Utils::setLogPath(__DIR__);
@@ -9,7 +10,7 @@ require_once 'src/service/Utils.php';
 
 // main
     // get the products
-    $produtos = OmieAPI::getProducts();
+    $produtos = OmieAPI::getProducts(false,"04");
 
     // for testing
         // $produtos = [

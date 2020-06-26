@@ -42,7 +42,7 @@ class OmieAPI {
 
     // get a list of all the products
         // TO DO
-        public static function getProducts(bool $longList=false): array {
+        public static function getProducts(bool $longList=false, string $tipo=""): array {
             // define if longlisted request or shorlisted
             if($longList){
                 $call = 'ListarProdutos';
@@ -61,15 +61,14 @@ class OmieAPI {
                 "apenas_importado_api"      => "N",
                 "filtrar_apenas_omiepdv"    => "N"
             );
+
             
             // get amount of pages
-            $totalRegistrosContent = self::sendRequest($endpoint, $call, $firstParams, $app_key, $app_secret);
-            $totalRegistrosContent = $totalRegistrosContent['content'];
-            $totalRegistrosContent = json_decode($totalRegistrosContent,true);
-            
-            $totalRegistros = $totalRegistrosContent['total_de_registros'];
-            $paginas = intdiv($totalRegistros,500);
-            
+            if ($tipo){
+                $paginas = intdiv(self::countProducts($tipo),500);
+            } else {
+                $paginas = intdiv(self::countProducts(),500);
+            }
             // set $params for request
             $params = array(
                 "pagina"                    => 1,
@@ -77,6 +76,10 @@ class OmieAPI {
                 "apenas_importado_api"      => "N",
                 "filtrar_apenas_omiepdv"    => "N"
             );
+            
+            if ($tipo){
+                $params['filtrar_apenas_tipo'] = $tipo;
+            }
 
             // initialize $produtos
             $produtos = [];
@@ -94,7 +97,7 @@ class OmieAPI {
             return $produtos;
         }
 
-        public static function countProducts(): int{
+        public static function countProducts(string $tipo=""): int{
             $call = 'ListarProdutosResumido';
             $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
             $params = array(
@@ -103,6 +106,11 @@ class OmieAPI {
                 "apenas_importado_api"      => "N",
                 "filtrar_apenas_omiepdv"    => "N"
             );
+
+            if ($tipo){
+                $params['filtrar_apenas_tipo'] = $tipo;
+            }
+
             $app_key = APP_KEY;
             $app_secret = APP_SECRET;
 

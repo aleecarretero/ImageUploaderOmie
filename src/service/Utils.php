@@ -102,8 +102,11 @@ class Utils {
         if ($urls) {
             return $urls;
         } else {
-            throw new Exception("Nenhum produto encontrado", 404);
-            
+            Utils::echoLog(
+                "Erro 404:" . PHP_EOL .
+                "Nenhum produto encontrado" . LINE_SEPARATOR
+            );
+            exit();
         }
     }
 
