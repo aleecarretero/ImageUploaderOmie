@@ -2,32 +2,43 @@
 
 ![Image Uploader](https://i.imgur.com/67noRO8.jpg)
 
- A script that dynamically uploads all the images stored in `./src/images` into [Omie](https://app.omie.com.br/) using the [`AlterarProduto` method](https://app.omie.com.br/api/v1/geral/produtos/#AlterarProduto).
+A script that dynamically uploads all the images stored in `./src/images` into [Omie](https://app.omie.com.br/) using the [`AlterarProduto` method](https://app.omie.com.br/api/v1/geral/produtos/#AlterarProduto).
+ 
+## Table of Contents
+1. [Image directory structure](#Image-directory-structure)
+    1. [Folders](#Folders)
+    2. [Filenames](#Filenames)
+    3. [Examples](#Examples)
+2. [Limits](#Limits)
+3. [Omie's API Documentation](#Omies-API-Documentation)
+    1. [ListarProdutos](#ListarProdutos)
+    2. [ListarProdutosResumido](#ListarProdutosResumido)
+    3. [AlterarProduto](#AlterarProduto)
+    4. [External Links](#External-Links)
 
- Image directory structure
- ---
+## Image directory structure
  
- ### Folders
- 
- In order for Omie's API to get the image, a public URL must be sent referencing it. Therefore, all images must be store inside Github's repository's folder `src/images`.
- 
- Each product must have its own foler in `src/images/:product_code`.
+### Folders
 
- > `:product_code` - Omie's code for the product. Found under "codigo" parameter.
- 
- ### Filenames
+In order for Omie's API to get the image, a public URL must be sent referencing it. Therefore, all images must be store inside Github's repository's folder `src/images`.
 
- Each image filename must be the concatenation between the product's code and a hyphenated sequenced number:
- 
- `src/images/:product_code/:product_code:sequential`
+Each product must have its own foler in `src/images/:product_code`.
 
- > `:product_code` - Omie's code for the product. Found under `"codigo"` parameter.
+> `:product_code` - Omie's code for the product. Found under "codigo" parameter.
  
- >`:sequential` - a hyphen (`'-'`) followed by a sequential number starting in 1.
- 
+### Filenames
+
+Each image filename must be the concatenation between the product's code and a hyphenated sequenced number:
+
+`src/images/:product_code/:product_code:sequential`
+
+> `:product_code` - Omie's code for the product. Found under `"codigo"` parameter.
+
+>`:sequential` - a hyphen (`'-'`) followed by a sequential number starting in 1 ([max. 6](#limits)).
+
 \*Product codes might contain special characters.
  
-### Examples
+### Example
 
 ```
 src/images/
@@ -48,8 +59,7 @@ src/images/
             FOO.BAR_123-2.jpg
 ```
 
-Limits
----
+## Limits
 
 | |Limit|
 |---|:---:|
@@ -57,21 +67,20 @@ Limits
 |Product|Unlimited|
 |Images|6 per product|
 
-Omie's API Documentation
----
+## Omie's API Documentation
 
 The endpoint used in this project was [`produtos`](https://app.omie.com.br/api/v1/geral/produtos/) and the methods were the following:
 
 #### [`ListarProdutos`](https://app.omie.com.br/api/v1/geral/produtos/#ListarProdutos)
->###### Function
+>**Function**
 >- Lists the complete register of all products
 >
->###### Parameters
+>**Parameters**
 >|Parameter |Description|
 >|:---:|:---|
 >|[produto_servico_list_request](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_list_request) |List of registered products |
 >
->###### Response
+>**Response**
 >|Response |Description|
 >|---:|:---|
 >|[produto_servico_listfull_response](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_listfull_response) |List of complete registration of products found in Omie|
@@ -79,15 +88,15 @@ The endpoint used in this project was [`produtos`](https://app.omie.com.br/api/v
 
 #### [`ListarProdutosResumido`](https://app.omie.com.br/api/v1/geral/produtos/#ListarProdutosResumido)
 
->###### Function
+>**Function**
 >- Lists the basic information of all products
 >
->###### Parameters
+>**Parameters**
 >|Parameter |Description|
 >|:---:|:---|
 >|[produto_servico_list_request](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_list_request) |List of registered products |
 >
->###### Response
+>**Response**
 >|Response |Description|
 >|---:|:---|
 >|[produto_servico_list_response](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_list_response) |List of short registration of products found in Omie|
@@ -95,22 +104,21 @@ The endpoint used in this project was [`produtos`](https://app.omie.com.br/api/v
 
 #### [`AlterarProduto`](https://app.omie.com.br/api/v1/geral/produtos/#AlterarProduto)
 
->###### Function
+>**Function**
 >- Updates a product
 >
->###### Parameters
+>**Parameters**
 >|Parameter |Description|
 >|:---:|:---|
 >|[	produto_servico_cadastro](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_cadastro) |Complete product's registration |
 >
->###### Response
+>**Response**
 >|Response |Description|
 >|---:|:---|
 >|[ produto_servico_status](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_status) |Product registration response status|
 
----
+### External links
 
-### Here you can find the [Complete Omie's API documentation](https://app.omie.com.br/).
-
+**Here you can find the [Complete Omie's API documentation](https://app.omie.com.br/).**
 
 ![[Omie's API documentation](https://app.omie.com.br/developer/service-list/)](https://i.imgur.com/0sGNSsF.png)
