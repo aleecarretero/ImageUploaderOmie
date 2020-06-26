@@ -17,7 +17,6 @@ A script that dynamically uploads all the images stored in `./src/images` into [
     4. [External Links](#External-Links)
 
 ## Image directory structure
----
  
 ### Folders
 
@@ -61,7 +60,6 @@ src/images/
 ```
 
 ## Limits
----
 
 | |Limit|
 |---|:---:|
@@ -70,7 +68,6 @@ src/images/
 |Images|6 per product|
 
 ## Omie's API Documentation
----
 
 The endpoint used in this project was [`produtos`](https://app.omie.com.br/api/v1/geral/produtos/) and the methods were the following:
 
@@ -121,7 +118,6 @@ The endpoint used in this project was [`produtos`](https://app.omie.com.br/api/v
 >|[ produto_servico_status](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_status) |Product registration response status|
 
 ### External links
----
 
 **Here you can find the [Complete Omie's API documentation](https://app.omie.com.br/).**
 
