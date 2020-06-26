@@ -2,7 +2,7 @@
 
 ![Image Uploader](https://i.imgur.com/67noRO8.jpg)
 
- A script that dynamically uploads all the images stored in `.\src\images` into [Omie](https://app.omie.com.br/) using the [`AlterarProduto` method](https://app.omie.com.br/api/v1/geral/produtos/#AlterarProduto).
+ A script that dynamically uploads all the images stored in `./src/images` into [Omie](https://app.omie.com.br/) using the [`AlterarProduto` method](https://app.omie.com.br/api/v1/geral/produtos/#AlterarProduto).
 
  Image directory structure
  ---
@@ -11,7 +11,7 @@
  
  In order for Omie's API to get the image, a public URL must be sent referencing it. Therefore, all images must be store inside Github's repository's folder `src/images`.
  
- Each product must have its own foler in `src\images\\:product_code`.
+ Each product must have its own foler in `src/images/:product_code`.
 
  > `:product_code` - Omie's code for the product. Found under "codigo" parameter.
  
@@ -19,7 +19,7 @@
 
  Each image filename must be the concatenation between the product's code and a hyphenated sequenced number:
  
- `src\images\\:product_code\\:product_code:sequential`
+ `src/images/:product_code/:product_code:sequential`
 
  > `:product_code` - Omie's code for the product. Found under `"codigo"` parameter.
  
