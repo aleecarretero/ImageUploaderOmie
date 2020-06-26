@@ -1,6 +1,6 @@
 # Omie Image Uploader
 
-![Image Uploader](https://raw.githubusercontent.com/aleecarretero/ImageUploaderOmie/master/social-cover.jpg?token=AETLSWFEPYXZMXPLKRD5ZEC66YNN4)
+![Image Uploader](https://i.imgur.com/67noRO8.jpg)
 
  A script that dynamically uploads all the images stored in `.\src\images` into [Omie](https://app.omie.com.br/) using the [`AlterarProduto` method](https://app.omie.com.br/api/v1/geral/produtos/#AlterarProduto).
 
