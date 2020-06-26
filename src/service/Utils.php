@@ -47,10 +47,27 @@ class Utils {
         return json_encode(json_decode($json, true), JSON_PRETTY_PRINT);
     }
 
-    // pushing associative arrays
-    public static function array_push_assoc(array $array, $key, $value){
-        $array[$key] = $value;
-        return $array;
+    public static function checkWinUnsafe(string $value) {
+        $forbidden = [
+            "\\",
+            "\/",
+            "\:",
+            "\*",
+            "\?",
+            "\"",
+            "\<",
+            "\>",
+            "\|",
+        ];
+
+        foreach ($forbidden as $char) {
+            $pos = strpos($value, $char);    
+            if ($pos === false) {
+                return false;
+            } else {
+                return $char;
+            }
+        }
     }
 
     // return array of images to be pushed to Omie
@@ -58,12 +75,13 @@ class Utils {
         $urls = [];
     
         foreach ($produtos as $produto) {
-            if (preg_match('/\//',$produto['codigo'])){
+            $winUnsafe = Utils::checkWinUnsafe($produto);
+            if (!($winUnsafe === false)){
                 Utils::echoLog(
                     'Erro!' . PHP_EOL .
                     "Caracter inválido encontrado em {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . PHP_EOL .
-                    "(caracter: \"/\")" . LINE_SEPARATOR
+                    "(caracter: {$winUnsafe})" . LINE_SEPARATOR
                 );
                 continue;
             }
@@ -99,7 +117,7 @@ class Utils {
                     // array with all image urls for this product
                     array_push($prodImgUrls, $downloadImageUrl);
                     
-                    $urls = Utils::array_push_assoc($urls, $produto['codigo_produto'], $prodImgUrls); // GitHub repository link
+                    $urls[$produto['codigo_produto']] = $prodImgUrls; // GitHub repository link
                 } elseif ($i==0) {
                     Utils::echoLog (
                         'Erro!' . PHP_EOL .
