@@ -47,27 +47,26 @@ class Utils {
         return json_encode(json_decode($json, true), JSON_PRETTY_PRINT);
     }
 
-    public static function checkWinUnsafe(string $value) {
+    public static function checkWinSafe(string $value) {
         $forbidden = [
             "\\",
-            "\/",
-            "\:",
-            "\*",
-            "\?",
+            "/",
+            ":",
+            "*",
+            "?",
             "\"",
-            "\<",
-            "\>",
-            "\|",
+            "<",
+            ">",
+            "|",
         ];
 
         foreach ($forbidden as $char) {
             $pos = strpos($value, $char);    
-            if ($pos === false) {
-                return false;
-            } else {
+            if ($pos !== false) {
                 return $char;
             }
         }
+        return true;
     }
 
     // return array of images to be pushed to Omie
@@ -75,13 +74,13 @@ class Utils {
         $urls = [];
     
         foreach ($produtos as $produto) {
-            $winUnsafe = Utils::checkWinUnsafe($produto);
-            if (!($winUnsafe === false)){
+            $winSafe = Utils::checkWinSafe($produto['codigo']);
+            if ($winSafe !== true){
                 Utils::echoLog(
                     'Erro!' . PHP_EOL .
                     "Caracter inválido encontrado em {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . PHP_EOL .
-                    "(caracter: {$winUnsafe})" . LINE_SEPARATOR
+                    "(caracter: {$winSafe})" . LINE_SEPARATOR
                 );
                 continue;
             }
