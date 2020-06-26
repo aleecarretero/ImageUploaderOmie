@@ -23,7 +23,7 @@
 
  > `:product_code` - Omie's code for the product. Found under `"codigo"` parameter.
  
- >`:sequential` - a hyphen (`'-'`) followed by a sequential number starting in 1.
+ >`:sequential` - a hyphen (`'-'`) followed by a sequential number starting in 1 ([max. 6](#External-links)).
  
 \*Product codes might contain special characters.
  
@@ -108,9 +108,9 @@ The endpoint used in this project was [`produtos`](https://app.omie.com.br/api/v
 >|---:|:---|
 >|[ produto_servico_status](https://app.omie.com.br/api/v1/geral/produtos/#produto_servico_status) |Product registration response status|
 
+External links
 ---
 
-### Here you can find the [Complete Omie's API documentation](https://app.omie.com.br/).
-
+**Here you can find the [Complete Omie's API documentation](https://app.omie.com.br/).**
 
 ![[Omie's API documentation](https://app.omie.com.br/developer/service-list/)](https://i.imgur.com/0sGNSsF.png)
