@@ -61,7 +61,6 @@ class OmieAPI {
                 "apenas_importado_api"      => "N",
                 "filtrar_apenas_omiepdv"    => "N"
             );
-
             
             // get amount of pages
             if ($tipo){
@@ -69,6 +68,7 @@ class OmieAPI {
             } else {
                 $paginas = intdiv(self::countProducts(),500);
             }
+
             // set $params for request
             $params = array(
                 "pagina"                    => 1,

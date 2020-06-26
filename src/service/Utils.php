@@ -58,6 +58,16 @@ class Utils {
         $urls = [];
     
         foreach ($produtos as $produto) {
+            if (preg_match('/\//',$produto['codigo'])){
+                Utils::echoLog(
+                    'Erro!' . PHP_EOL .
+                    "Caracter inválido encontrado em {$produto['descricao']}" . PHP_EOL .
+                    "(cod.: {$produto['codigo']})" . PHP_EOL .
+                    "(caracter: \"/\")" . LINE_SEPARATOR
+                );
+                continue;
+            }
+            
             $prodImgUrls = [];
             
             // get all product folders
@@ -103,7 +113,7 @@ class Utils {
             return $urls;
         } else {
             Utils::echoLog(
-                "Erro 404:" . PHP_EOL .
+                "ERRO FATAL:" . PHP_EOL .
                 "Nenhum produto encontrado" . LINE_SEPARATOR
             );
             exit();
