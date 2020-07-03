@@ -75,7 +75,7 @@ class Utils {
     
         foreach ($produtos as $produto) {
             $winSafe = Utils::checkWinSafe($produto['codigo']);
-            if ($winSafe !== true){
+            if ($winSafe !== true) {
                 Utils::echoLog(
                     'Erro!' . PHP_EOL .
                     "Caracter inválido encontrado em {$produto['descricao']}" . PHP_EOL .
@@ -90,42 +90,56 @@ class Utils {
             // get all product folders
             $productFolder = IMAGES_FOLDER_DIR . $produto['codigo'] . '\\';
             $productURL = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
-            for ($i=0;$i<5;$i++) {
-                $imagePath = false;
-    
-                $jpgImageName  = $produto['codigo'] . '-' . strval($i+1) . '.jpg';  // jpg format
-                $jpegImageName = $produto['codigo'] . '-' . strval($i+1) . '.jpeg'; // jpeg format
-                $pngImageName  = $produto['codigo'] . '-' . strval($i+1) . '.png';  // png format
-    
-                if (file_exists($productFolder . $jpegImageName)) {
-                    $imagePath = $productURL . $jpegImageName;
+            
+            if (is_dir($productFolder)) {
+                $files = scandir($productFolder);
+            } else {
+                Utils::echoLog(
+                    'Erro!' . PHP_EOL .
+                    "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
+                    "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
+                );
+                continue;
+            }
+
+            foreach ($files as $file => $path) {
+                // clean non-image files
+                $ext = pathinfo($path)['extension'];
+                switch ($ext) {
+                    case "jpeg":
+                    case "jpg":
+                    case "png":
+                    default:
+                        unset($file);
                 }
-                if (file_exists($productFolder . $jpgImageName)) {
-                    $imagePath = $productURL . $jpgImageName;
-                }
-                if (file_exists($productFolder . $pngImageName)) {
-                    $imagePath = $productURL . $pngImageName;
-                }
-                if ($imagePath) {
+            }
+            
+            if (sizeof($files) > 0){
+                foreach ($files as $file) {
+                    $imagePath = false;
+                    // get filename
+                    $imagePath = $file;
+
                     // getting downloadable image url from github
                     $imageUrl = GITHUB_GET_CONTENTS_PATH . $imagePath;
 
                     $git = new GithubAPI;
                     $downloadImageUrl = $git->getImageUrl($imageUrl);
-                    
+                
                     // array with all image urls for this product
                     array_push($prodImgUrls, $downloadImageUrl);
-                    
+                
                     $urls[$produto['codigo_produto']] = $prodImgUrls; // GitHub repository link
-                } elseif ($i==0) {
-                    Utils::echoLog (
-                        'Erro!' . PHP_EOL .
-                        "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
-                        "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
-                    );
                 }
+            } else {
+                Utils::echoLog(
+                    'Erro!' . PHP_EOL .
+                    "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
+                    "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
+                );
+                continue;
             }
-        }
+        }   
         if ($urls) {
             return $urls;
         } else {
