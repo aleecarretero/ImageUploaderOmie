@@ -100,9 +100,6 @@ class Utils {
                 $productURL = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
             }
             
-// testing
-            continue;
-
 
             if (is_dir($productFolder)) {
                 $files = array_diff(scandir($productFolder), array('.', '..'));
