@@ -92,7 +92,7 @@ class Utils {
             $productURL = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
             
             if (is_dir($productFolder)) {
-                $files = scandir($productFolder);
+                $files = array_diff(scandir($productFolder), array('.', '..'));
             } else {
                 Utils::echoLog(
                     'Erro!' . PHP_EOL .
@@ -105,31 +105,32 @@ class Utils {
             foreach ($files as $file => $path) {
                 // clean non-image files
                 $ext = pathinfo($path)['extension'];
-                switch ($ext) {
-                    case "jpeg":
-                    case "jpg":
-                    case "png":
-                    default:
-                        unset($file);
+                if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'png'){
+                    unset($files[$file]);
                 }
             }
             
             if (sizeof($files) > 0){
                 foreach ($files as $file) {
-                    $imagePath = false;
+                    $imagePath = $productFolder.$file;
                     // get filename
-                    $imagePath = $file;
 
-                    // getting downloadable image url from github
-                    $imageUrl = GITHUB_GET_CONTENTS_PATH . $imagePath;
+                    if (file_exists($imagePath)) {
 
-                    $git = new GithubAPI;
-                    $downloadImageUrl = $git->getImageUrl($imageUrl);
+                        $imagePath = $productURL.$file;
+
+                        // getting downloadable image url from github
+                        $imageUrl = GITHUB_GET_CONTENTS_PATH . $imagePath;
+
+                        $git = new GithubAPI;
+                        $downloadImageUrl = $git->getImageUrl($imageUrl);
                 
-                    // array with all image urls for this product
-                    array_push($prodImgUrls, $downloadImageUrl);
+                        // array with all image urls for this product
+                        array_push($prodImgUrls, $downloadImageUrl);
                 
-                    $urls[$produto['codigo_produto']] = $prodImgUrls; // GitHub repository link
+                        $urls[$produto['codigo_produto']] = $prodImgUrls; // GitHub repository link
+                    }
+
                 }
             } else {
                 Utils::echoLog(
@@ -137,8 +138,8 @@ class Utils {
                     "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
                 );
-                continue;
             }
+            
         }   
         if ($urls) {
             return $urls;
@@ -166,9 +167,12 @@ class Utils {
                 $content = json_decode($response['content'],true);
 
                 if ($content['codigo_status'] == 0) {
+
+                    $codigo = OmieAPI::getCodigo($content['codigo_produto']);
+
                     Utils::echoLog (
                         'Sucesso!' . PHP_EOL .
-                        "Produto {$content['codigo_produto_integracao']} " .
+                        "Produto {$codigo} " .
                         'alterado com sucesso' . LINE_SEPARATOR
                     );
                 } else {

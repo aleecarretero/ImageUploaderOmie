@@ -7,6 +7,25 @@ require_once 'OmieAuthentication.php';
 require_once 'cert/Keys.php';
 
 class OmieAPI {
+    // Get a product codigo from codigo_omie
+    public static function getCodigo(int $codigoOmie){
+        
+        $endpoint = 'https://app.omie.com.br/api/v1/geral/produtos/';
+        $app_key = APP_KEY;
+        $app_secret = APP_SECRET;
+        $call = 'ConsultarProduto';
+        
+        // params 
+        $params = array(
+            "codigo_produto" => $codigoOmie
+        );
+        
+        $return = OmieAPI::sendRequest($endpoint, $call, $params, $app_key, $app_secret)['content'];
+        $return = json_decode($return,true)['codigo'];
+                
+        return $return;
+    }
+
     // Updates the images in the product
         // if image_url is the same as already in the product, it does not duplicate
         public static function alterarImagens(string $codigo_produto, array $urls, string $key, string $secret): array {
