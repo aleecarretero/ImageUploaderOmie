@@ -88,9 +88,22 @@ class Utils {
             $prodImgUrls = [];
             
             // get all product folders
-            $productFolder = IMAGES_FOLDER_DIR . $produto['codigo'] . '\\';
-            $productURL = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
+
+            $generalProduct = [];
+            preg_match("/.{3}\..{3}\..{4}/",$produto['codigo'], $generalProduct);
+
+            if (sizeof($generalProduct) > 0) {
+                $productFolder = IMAGES_FOLDER_DIR . $generalProduct['0'] . '\\';
+                $productURL = IMAGES_FOLDER_PATH . $generalProduct['0'] . '/';
+            } else {
+                $productFolder = IMAGES_FOLDER_DIR . $produto['codigo'] . '\\';
+                $productURL = IMAGES_FOLDER_PATH . $produto['codigo'] . '/';
+            }
             
+// testing
+            continue;
+
+
             if (is_dir($productFolder)) {
                 $files = array_diff(scandir($productFolder), array('.', '..'));
             } else {
