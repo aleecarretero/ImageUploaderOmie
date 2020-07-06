@@ -8,7 +8,7 @@ class GithubAPI {
 
         $options = [
             CURLOPT_CUSTOMREQUEST  => "GET",    // set request type post or get
-            CURLOPT_POST           => false,     // set to GET
+            CURLOPT_POST           => false,    // set to GET
             CURLOPT_RETURNTRANSFER => true,     // return web page
             CURLOPT_HEADER         => false,    // don't return headers
             CURLOPT_FOLLOWLOCATION => true,     // follow redirects
