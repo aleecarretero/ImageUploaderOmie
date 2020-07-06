@@ -70,7 +70,7 @@ class Utils {
     }
 
     // return array of images to be pushed to Omie
-    public static function getImagesUrl(array $produtos): array {
+    public static function getImagesUrl(array $produtos) {
         $urls = [];
     
         foreach ($produtos as $produto) {
@@ -153,43 +153,42 @@ class Utils {
         if ($urls) {
             return $urls;
         } else {
-            Utils::echoLog(
-                "ERRO FATAL:" . PHP_EOL .
-                "Nenhum produto encontrado" . LINE_SEPARATOR
-            );
-            exit();
+            return false;
         }
     }
 
     // push a batch of images to Omie
     public static function sendBatchImg(array $produtos) {
-        // Generate image url
+        // Generate image url array for each product
         Utils::echoSys('Coletando os endereços das imagens',4,1,2);
-        $urls = self::getImagesUrl($produtos);
+        foreach ($produtos as $produto) {
+            $urls = self::getImagesUrl($produto);
+            if ($urls == false){
+                continue;
+            }
 
-        // push images to Omie for each product
-        Utils::echoSys('Enviando as imagens para o Omie',4,1,2);
-        foreach ($urls as $key=>$codProduto) {
-
+            // push images to Omie
+            Utils::echoSys('Enviando as imagens para o Omie', 4, 1, 2);
+            foreach ($urls as $key=>$codProduto) {
                 $omieRequest = new OmieAPI;
                 $response = $omieRequest->alterarImagens(strval($key), $codProduto, APP_KEY, APP_SECRET);
-                $content = json_decode($response['content'],true);
+                $content = json_decode($response['content'], true);
 
                 if ($content['codigo_status'] == 0) {
-
                     $codigo = OmieAPI::getCodigo($content['codigo_produto']);
 
-                    Utils::echoLog (
+                    Utils::echoLog(
                         'Sucesso!' . PHP_EOL .
                         "Produto {$codigo} " .
                         'alterado com sucesso' . LINE_SEPARATOR
                     );
                 } else {
-                    Utils::echoLog (
+                    Utils::echoLog(
                         "Erro {$content['codigo_status']}: " .
                         $content['descricao_status']
                     );
                 }
+            }
         }
     }
 }
