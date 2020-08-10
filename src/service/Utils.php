@@ -143,7 +143,7 @@ class Utils {
                 }
             } else {
                 Utils::echoLog(
-                    'Erro!' . PHP_EOL .
+                    '[X] Erro!' . PHP_EOL .
                     "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
                 );
@@ -151,6 +151,11 @@ class Utils {
             
         }   
         if ($urls) {
+            Utils::echoLog(
+                '[OK] Sucesso!' . PHP_EOL .
+                "Imagem encontrada para {$produto['descricao']}" . PHP_EOL .
+                "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
+            );
             return $urls;
         } else {
             Utils::echoLog(
