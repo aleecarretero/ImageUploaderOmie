@@ -10,7 +10,7 @@ require_once 'src/service/OmieAPI.php';
 
 // main
     // get the products
-        $produtos = OmieAPI::getProducts(false,"04");
+        $produtos = OmieAPI::getProducts(false,"00");
     
     // logging
         Utils::echoSys('Lista de produtos', 6,0);
