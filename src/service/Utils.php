@@ -138,6 +138,12 @@ class Utils {
                         array_push($prodImgUrls, $downloadImageUrl);
                 
                         $urls[$produto['codigo_produto']] = $prodImgUrls; // GitHub repository link
+
+                        Utils::echoLog(
+                            '[OK] Sucesso!' . PHP_EOL .
+                            "Imagem encontrada para {$produto['descricao']}" . PHP_EOL .
+                            "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
+                        );
                     }
 
                 }
@@ -151,11 +157,6 @@ class Utils {
             
         }   
         if ($urls) {
-            Utils::echoLog(
-                '[OK] Sucesso!' . PHP_EOL .
-                "Imagem encontrada para {$produto['descricao']}" . PHP_EOL .
-                "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
-            );
             return $urls;
         } else {
             Utils::echoLog(
