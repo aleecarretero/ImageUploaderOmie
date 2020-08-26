@@ -72,11 +72,15 @@ class Utils {
     // return array of images to be pushed to Omie
     public static function getImagesUrl(array $produtos): array {
         $urls = [];
+        $step = 1;
+        $totalOfProducts = count($produtos);
     
         foreach ($produtos as $produto) {
+            $progress = round(100 * $step / $totalOfProducts, 2);
             $winSafe = Utils::checkWinSafe($produto['codigo']);
             if ($winSafe !== true) {
                 Utils::echoLog(
+                    "{$progress} % " .
                     'Erro!' . PHP_EOL .
                     "Caracter inválido encontrado em {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . PHP_EOL .
@@ -104,6 +108,7 @@ class Utils {
                 $files = array_diff(scandir($productFolder), array('.', '..'));
             } else {
                 Utils::echoLog(
+                    "{$progress} % " .
                     'Erro!' . PHP_EOL .
                     "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
@@ -140,6 +145,7 @@ class Utils {
                         $urls[$produto['codigo_produto']] = $prodImgUrls; // GitHub repository link
 
                         Utils::echoLog(
+                            "{$progress} % " .
                             '[OK] Sucesso!' . PHP_EOL .
                             "Imagem encontrada para {$produto['descricao']}" . PHP_EOL .
                             "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
@@ -149,12 +155,13 @@ class Utils {
                 }
             } else {
                 Utils::echoLog(
+                    "{$progress} % " .
                     '[X] Erro!' . PHP_EOL .
                     "Nenhuma imagem encontrada para {$produto['descricao']}" . PHP_EOL .
                     "(cod.: {$produto['codigo']})" . LINE_SEPARATOR
                 );
             }
-            
+            $step++;
         }   
         if ($urls) {
             return $urls;
@@ -175,27 +182,37 @@ class Utils {
 
         // push images to Omie for each product
         Utils::echoSys('Enviando as imagens para o Omie',4,1,2);
+        $totalOfUrls = count($urls);
+        $step = 1;
         foreach ($urls as $key=>$codProduto) {
+            $progress = round(100 * $step / $totalOfUrls, 2);
+            $omieRequest = new OmieAPI;
+            $response = $omieRequest->alterarImagens(strval($key), $codProduto, APP_KEY, APP_SECRET);
+            $content = json_decode($response['content'],true);
 
-                $omieRequest = new OmieAPI;
-                $response = $omieRequest->alterarImagens(strval($key), $codProduto, APP_KEY, APP_SECRET);
-                $content = json_decode($response['content'],true);
+            if (array_key_exists('codigo_status',$content)) {
 
-                if ($content['codigo_status'] == 0) {
+                $codigo = OmieAPI::getCodigo($content['codigo_produto']);
 
-                    $codigo = OmieAPI::getCodigo($content['codigo_produto']);
-
+                Utils::echoLog (
+                    "Sucesso! {$progress} % " .
+                    "Produto {$codigo} " .
+                    'alterado com sucesso' . LINE_SEPARATOR
+                );
+            } elseif (array_key_exists('faultcode',$content))
+                {
                     Utils::echoLog (
-                        'Sucesso!' . PHP_EOL .
-                        "Produto {$codigo} " .
-                        'alterado com sucesso' . LINE_SEPARATOR
+                        "{$progress} % " .
+                        "Erro {$content['faultcode']}: " . PHP_EOL .
+                        $content['faultstring'] . LINE_SEPARATOR
                     );
                 } else {
-                    Utils::echoLog (
-                        "Erro {$content['codigo_status']}: " .
-                        $content['descricao_status']
+                    Utils::echoLog(
+                        "{$progress} % " .
+                        print_r($content, true)
                     );
                 }
+            $step++;
         }
     }
 }
